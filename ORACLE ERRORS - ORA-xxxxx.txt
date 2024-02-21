@@ -1,0 +1,117 @@
+﻿1. Getting into hr schema through SQLPLUS
+show con_name;
+
+
+select name, con_id from v$pdbs;
+
+
+select name from v$active_services where con_id = 3;
+
+
+exit;
+
+
+--make entry in tnsora file (C:\app\Shuddhendu\virtual\product\12.2.0\dbhome_1\network\admin)
+
+
+ORCLPDB=
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orclpdb)
+    )
+  )
+Login into sysdba again!
+
+
+Show con_name;
+
+
+alter session set container = orclpdb;
+
+
+select name, open_mode from v$pdbs; 
+
+
+alter pluggable database open;
+
+
+ALTER USER hr IDENTIFIED BY hr ACCOUNT UNLOCK;
+
+
+conn hr/hr@ORCLPDB;
+show user;
+	
+
+
+
+2. TNS LISTENER NOT RUNNING
+HOST = localhost
+PORT = 1521...and still not running
+Error → 
+Status : Failure - Test failed : IO Error: The Network Adapter could not establish the connection vendor code 17002
+Solution → 
+
+
+1. Go to cmd (Run as Administrator)
+2. Type “lsnrctl status” i.e. ListenerControl Status
+3. If something like ‘Unknown Error’ comes up, it means listener is stopped and not running
+4. To start the listener, type “lsnrctl start” i.e. ListenerControl Start
+5. This will start the listener and problem should be fixed
+	________________
+
+
+3. Vendor Code 28002
+Warning ⇒ The password will expire in 7 days
+Solution ⇒ Just Click OK and set the new password
+Command ⇒ ALTER USER username IDENTIFIED BY password 
+Ex: ALTER USER HR IDENTIFIED BY HR;
+
+
+If password is expired -
+   1. Go to cmd  (Run as Administrator)
+   2. Type - “sqlplus sys as sysdba”
+   3. Type the password (HR/HR/anything)
+   4. Then execute - “ALTER USER HR IDENTIFIED BY HR;” 
+   5. Done
+   6. For oracle 12c, we need to provide the service name along with the login credentials.
+
+
+conn hr/hr@ORCLPDB;
+	  
+
+
+
+4. ORA-12560 TNS: protocol adapter error
+Solution ⇒ 
+1. Go to Run (Win + R)
+2. Then type services.msc
+3. Select OracleMTSRecoveryService and click start this service
+4. Select OracleServicesORCL and start this service
+5. Now, we should be able to connect
+6. If not, go to cmd and connect as sysdba
+
+
+                        4. ORA-01033 Database initialization or shutdown in progress
+
+
+sqlplus
+
+
+sys as sysdba
+sysdba
+
+
+alter session set container = orclpdb;
+
+
+Startup open;
+	
+
+________________
+
+
+
+
+5.
