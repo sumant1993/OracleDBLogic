@@ -1,0 +1,11 @@
+VLOOKUP and XLOOKUP is used for join the two table 
+
+Vlookup==IFERROR(VLOOKUP(B4,H$1:I$4,2,0),"NA")
+XLOOKUP==XLOOKUP(B2,H$2:H$4,H$2:I$4,"na",0)
+
+id 	lid	VLOOKUP	XLOOKUP				lid	lname
+1	1	asus	1	asus			1	asus
+2	2	samsung	2	samsung			2	samsung
+3	5	NA	na				3	dell
+4	1	asus	1	asus				
+5	3	dell	3	dell				
